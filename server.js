@@ -5,7 +5,6 @@ var request = require('request');
 
 require('should');
 
-include MyTokens.js;
 
 /*
 var express = require('express');
@@ -20,12 +19,12 @@ var recipientListFile = "EmergencyResponseTeam.txt";
 //var recipientListFile = "EmergencyResponseTeamTest.txt";
 var myEmailList = "EmergencyResponseSpark.txt";
 
-var myToken = "Bearer " + TOKEN_SPARK_BOT;
-var token_spark = TOKEN_SPARK_BOT;
-var token_tropo_smsemer_txt = TOKEN_TROPO_SMSEMER_TXT;
-var token_tropo_callspark_call = TOKEN_TROPO_CALLSPARK_CALL;
-var token_tropo_emerconf_call = TOKEN_TROPO_EMERCONF_CALL;
-var token_tropo_emerconf_txt = TOKEN_TROPO_EMERCONF_TXT;
+var token_spark = process.env.TOKEN_SPARK_BOT;
+var token_tropo_smsemer_txt = process.env.TOKEN_TROPO_SMSEMER_TXT;
+var token_tropo_callspark_call = process.env.TOKEN_TROPO_CALLSPARK_CALL;
+var token_tropo_emerconf_call = process.env.TOKEN_TROPO_EMERCONF_CALL;
+var token_tropo_emerconf_txt = process.env.TOKEN_TROPO_EMERCONF_TXT;
+var myToken = "Bearer " + token_spark;
 
 
 // define flint setup
@@ -81,7 +80,7 @@ flint.hears('/getroomdetails', function(bot, trigger) {
         url: "https://api.ciscospark.com/v1/rooms/" + myRoomId,
         method: "GET",
         headers: {
-            "Authorization": myToken,
+            "Authorization": "BEARER "+token_spark,
             "Content-Type": "application/json"
         },
         qs: {
@@ -247,7 +246,7 @@ flint.hears('codered', function(bot, trigger) {
             url: "https://api.ciscospark.com/v1/rooms",
             method: "POST",
             headers: {
-                "Authorization": myToken,
+                "Authorization": "BEARER "+token_spark,
                 "Content-Type": "application/json"
             },
 /*            body: {
@@ -280,7 +279,7 @@ flint.hears('codered', function(bot, trigger) {
                         url: "https://api.ciscospark.com/v1/memberships",
                         method: "POST",
                         headers: {
-                            "Authorization": myToken,
+                            "Authorization": "BEARER "+token_spark,
                             "Content-Type": "application/json",
                         }, //headers
                         body: JSON.stringify(params)
@@ -300,7 +299,7 @@ flint.hears('codered', function(bot, trigger) {
                             url: "https://api.ciscospark.com/v1/rooms/" + room.id,
                             method: "GET",
                             headers: {
-                                "Authorization": myToken,
+                                "Authorization": "BEARER "+token_spark,
                                 "Content-Type": "application/json"
                             },
                             qs: {
@@ -321,7 +320,7 @@ flint.hears('codered', function(bot, trigger) {
                                     console.log("new room sipURI: " + sipURI);
         
                                     // Tropo URI with token
-                                    var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_CALLSPARK_CALL+"&numbertodial=" + sipURI;
+                                    var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_callspark_call+"&numbertodial=" + sipURI;
                                     console.log("sipURI: " + sipURI);
                                     console.log("mycallURI: " + myCallURI);
                                     console.log("bot.myemail: " + bot.myemail);
@@ -373,7 +372,7 @@ flint.hears('codered', function(bot, trigger) {
                                 url: "https://api.ciscospark.com/v1/memberships",
                                 method: "POST",
                                 headers: {
-                                    "Authorization": myToken,
+                                    "Authorization": "BEARER "+token_spark,
                                     "Content-Type": "application/json",
                                 }, //headers
                                 body: JSON.stringify(params)
@@ -432,8 +431,8 @@ flint.hears('codered', function(bot, trigger) {
 
                 //for each array element first sub-element [0] is phone, second [1] is SMS number
                 sms = output[i][1];
-//                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_SMSEMER_TXT+"&numbertodial="+sms;
-                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_SMSEMER_TXT"+"&numbertodial="+sms+"&roomName="+roomName+"&sipUri="+sipURI+"&direction=out";
+//                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_smsemer_txt+"&numbertodial="+sms;
+                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_smsemer_txt"+"&numbertodial="+sms+"&roomName="+roomName+"&sipUri="+sipURI+"&direction=out";
 
                 // send SMS/text
                 request({
@@ -663,8 +662,8 @@ flint.hears('ultimate', function(bot, trigger) {
 
                 //for each array element first sub-element [0] is phone, second [1] is SMS number
                 sms = output[i][1];
-//                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_SMSEMER_TXT+"&numbertodial="+sms;
-                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_SMSEMER_TXT+"&numbertodial="+sms+"&roomName="+roomName+"&sipUri="+sipURI+"&direction=out";
+//                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_smsemer_txt+"&numbertodial="+sms;
+                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_smsemer_txt+"&numbertodial="+sms+"&roomName="+roomName+"&sipUri="+sipURI+"&direction=out";
 
                 // send SMS/text
                 request({
@@ -784,7 +783,7 @@ flint.hears('/911', function(bot, trigger) {
                                     console.log("new room sipURI: " + sipURI);
         
                                     // Tropo URI with token
-                                    var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_CALLSPARK_CALL+"&numbertodial=" + sipURI;
+                                    var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_callspark_call+"&numbertodial=" + sipURI;
                                     console.log("sipURI: " + sipURI);
                                     console.log("mycallURI: " + myCallURI);
                                     console.log("bot.myemail: " + bot.myemail);
@@ -958,7 +957,7 @@ flint.hears('911', function(bot, trigger) {
                                     console.log("new room sipURI: " + sipURI);
         
                                     // Tropo URI with token
-                                    var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_CALLSPARK_CALL+"&numbertodial=" + sipURI;
+                                    var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_callspark_call+"&numbertodial=" + sipURI;
                                     console.log("sipURI: " + sipURI);
                                     console.log("mycallURI: " + myCallURI);
                                     console.log("bot.myemail: " + bot.myemail);
@@ -1151,8 +1150,8 @@ flint.hears('/911txt', function(bot,trigger) {
 
                 //for each array element first sub-element [0] is phone, second [1] is SMS number
                 sms = output[i][1];
-//                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_SMSEMER_TXT+"&numbertodial="+sms;
-                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_SMSEMER_TXT+"&numbertodial="+sms+"&roomName="+roomName+"&sipUri="+sipURI;
+//                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_smsemer_txt+"&numbertodial="+sms;
+                var mySmsURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_smsemer_txt+"&numbertodial="+sms+"&roomName="+roomName+"&sipUri="+sipURI;
 
                 // send SMS/text
                 request({
@@ -1186,8 +1185,8 @@ flint.hears('/911tro', function(bot,trigger) {
 
             for(var i=0; i<listLength; i++) {
                 //for each array element first sub-element is phone, second is SMS number
-                var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_EMERCONF_CALL+"&numbertodial="+output[i][0];
-                var myTextURI = "https://api.tropo.com/1.0/sessions?action=create&token="+TOKEN_TROPO_EMERCONF_TXT+"&numbertodial="+output[i][1];
+                var myCallURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_emerconf_call+"&numbertodial="+output[i][0];
+                var myTextURI = "https://api.tropo.com/1.0/sessions?action=create&token="+token_tropo_emerconf_call+"&numbertodial="+output[i][1];
 
                 // place call
                 request({
