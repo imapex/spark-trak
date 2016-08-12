@@ -9,6 +9,9 @@
 
 Welcome to your Node.js project on Cloud9 IDE!
 
+Change this description - not really a Cloud9 IDE!
+
+
 This chat example showcases how to use `socket.io` with a static `express` server.
 
 ## Running the server
